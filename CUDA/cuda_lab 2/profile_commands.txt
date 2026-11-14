@@ -1,0 +1,15 @@
+# 1) Compile with O2
+nvcc -O2 -lineinfo dot_rows_slow.cu   -o dot_rows_slow
+nvcc -O2 -lineinfo dot_rows_shared.cu -o dot_rows_shared
+
+# 2) Functional/timing run with identical data
+./dot_rows_slow   4096 4096 100 12345
+./dot_rows_shared 4096 4096 100 12345
+
+# 3) CLI profiling (GUI may be used instead as required by the task)
+ncu --set full -o slow_ncu ./dot_rows_slow 4096 4096 100 12345
+ncu --set full -o shared_ncu ./dot_rows_shared 4096 4096 100 12345
+
+# 4) Optional export for later processing
+ncu --page raw --csv --set full ./dot_rows_slow 4096 4096 100 12345 > slow_raw.csv
+ncu --page raw --csv --set full ./dot_rows_shared 4096 4096 100 12345 > shared_raw.csv
